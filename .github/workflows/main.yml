@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
         
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.4
+        
       - uses: actions/cache@v2
         with:
           path: ~/.npm
@@ -23,15 +26,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.4
       - name: Install Packages
-        run: npm install
+      - run: npm ci
+        
       - name: Build page
         run: npm run build
+        
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: _site
+          publish_dir: dist
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
